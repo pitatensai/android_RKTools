@@ -41,7 +41,11 @@ fi
 ./gen-package-file.sh $IMAGE_PATH > $PACKAGE_FILE
 
 echo "start to make update.img..."
-./afptool -pack ./ $IMAGE_PATH/update.img $PACKAGE_FILE || pause
-./rkImageMaker ${vendor_id_map[$PLATFORM]} $IMAGE_PATH/MiniLoaderAll.bin $IMAGE_PATH/update.img update.img -os_type:androidos || pause
+PLATFORM=linux
+if [ "$(uname)" == "Darwin" ]; then
+	PLATFORM=mac
+fi
+./${PLATFORM}/afptool -pack ./ $IMAGE_PATH/update.img $PACKAGE_FILE || pause
+./${PLATFORM}/rkImageMaker ${vendor_id_map[$PLATFORM]} $IMAGE_PATH/MiniLoaderAll.bin $IMAGE_PATH/update.img update.img -os_type:androidos || pause
 echo "Making update.img OK."
 exit 0

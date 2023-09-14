@@ -13,8 +13,12 @@ if [ ! -f "update.img" ]; then
 	echo "Error:No found update.img!"
 	pause
 fi
-./rkImageMaker -unpack update.img output || pause
-./afptool -unpack output/firmware.img output || pause
+PLATFORM=linux
+if [ "$(uname)" == "Darwin" ]; then
+	PLATFORM=mac
+fi
+./${PLATFORM}/rkImageMaker -unpack update.img output || pause
+./${PLATFORM}/afptool -unpack output/firmware.img output || pause
 rm -f output/firmware.img
 rm -f output/boot.bin
 echo "Unpacking update.img OK."
